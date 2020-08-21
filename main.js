@@ -1,4 +1,4 @@
-phoneNumber = prompt('Введите 12-ти значный номер телефона');
+let phoneNumber = prompt('Введите 12-ти значный номер телефона');
 
 function formattedPhone(phone) {
   let newString = '';
