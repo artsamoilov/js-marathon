@@ -34,7 +34,7 @@ function renderHP(person) {
 }
 
 function renderHPLife(person) {
-    person.elHP.innerText = person.damageHP + ' ' + person.defaultHP;
+    person.elHP.innerText = person.damageHP + ' / ' + person.defaultHP;
 }
 
 function renderProgressbarHP(person) {
