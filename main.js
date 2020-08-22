@@ -17,9 +17,9 @@ const enemy = {
     elProgressbar: document.getElementById('progressbar-enemy'),
 }
 
-attackingButton($btn, 'Kick', enemy, 20);
+attackingButton($btn, 'Kick', 20, 20);
 
-attackingButton($btnSlap, 'Slap', enemy, 10);
+attackingButton($btnSlap, 'Slap', 10, 0);
 
 function init() {
     console.log('Start game!');
@@ -27,10 +27,11 @@ function init() {
     renderHP(enemy);
 }
 
-function attackingButton(button, text, person, randomValue) {
+function attackingButton(button, text, enemyRandomDmg, characterRandomDmg) {
     button.addEventListener('click', function() {
         console.log(text);
-        changeHP(random(randomValue), person);
+        changeHP(random(enemyRandomDmg), enemy);
+        changeHP(random(characterRandomDmg), character);
     })
 }
 
@@ -48,7 +49,7 @@ function renderProgressbarHP(person) {
 }
 
 function changeHP(count, person) {
-    if (person.damageHP < count) {
+    if (person.damageHP <= count) {
         person.damageHP = 0;
         alert('Бедный ' + person.name + ' проиграл бой!');
         $btn.disabled = true;
