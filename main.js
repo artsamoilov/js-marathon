@@ -17,14 +17,12 @@ const enemy = {
     elProgressbar: document.getElementById('progressbar-enemy'),
 }
 
-attackingButton($btn, 'Kick', 20, 20);
-
-attackingButton($btnSlap, 'Slap', 10, 0);
-
 function init() {
     console.log('Start game!');
     renderHP(character);
     renderHP(enemy);
+    attackingButton($btn, 'Kick', 20, 20);
+    attackingButton($btnSlap, 'Slap', 10, 0);
 }
 
 function attackingButton(button, text, enemyRandomDmg, characterRandomDmg) {
