@@ -3,7 +3,7 @@ const $btnSlap = document.getElementById('btn-slap');
 
 const character = {
     name: 'Pikachu',
-    defaultHP: 100,
+    defaultHP: 200,
     damageHP: 100,
     elHP: document.getElementById('health-character'),
     elProgressbar: document.getElementById('progressbar-character'),
@@ -15,8 +15,8 @@ const character = {
 
 const enemy = {
     name: 'Charmander',
-    defaultHP: 100,
-    damageHP: 100,
+    defaultHP: 120,
+    damageHP: 110,
     elHP: document.getElementById('health-enemy'),
     elProgressbar: document.getElementById('progressbar-enemy'),
     renderHP: renderHP,
@@ -51,7 +51,7 @@ function renderHPLife() {
 }
 
 function renderProgressbarHP() {
-    this.elProgressbar.style.width = this.damageHP + '%';
+    this.elProgressbar.style.width = (this.damageHP / this.defaultHP) * 100 + '%';
 }
 
 function changeHP(count) {
