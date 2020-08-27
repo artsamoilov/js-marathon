@@ -68,10 +68,7 @@ function changeHP(count) {
     const log = this === enemy ? generateLog(this, character) : generateLog(this, enemy);
 
     if (count != 0) {
-        const $p = document.createElement('p');
-        $p.innerText = `${i}. ${log}`;
-        $logs.insertBefore($p, $logs.children[0]);
-        i++;
+        addLogString(log);
     }
 
     if (this.damageHP <= 0) {
@@ -103,6 +100,13 @@ function generateLog(firstPerson, secondPerson) {
     ];
 
     return logs[random(logs.length) - 1];
+}
+
+function addLogString(logString) {
+    const $p = document.createElement('p');
+    $p.innerText = `${i}. ${logString}`;
+    $logs.insertBefore($p, $logs.children[0]);
+    i++;
 }
 
 init();
