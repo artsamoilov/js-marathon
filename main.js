@@ -31,6 +31,8 @@ const enemy = {
 const {name, defaultHP, damageHP} = character;
 const {name: nameEnemy, defaultHP: defaultHPEnemy, damageHP: damageHPEnemy} = enemy;
 
+const countJolt = showAvailableClicks($btn, 13);
+const countSlap = showAvailableClicks($btnSlap, 8);
 
 function init() {
     console.log('Start game!');
@@ -38,6 +40,8 @@ function init() {
     enemy.renderHP();
     attackingButton($btn, 'Kick', 20, 20);
     attackingButton($btnSlap, 'Slap', 10, 0);
+    countJolt();
+    countSlap();
 }
 
 function attackingButton(button, text, enemyRandomDmg, characterRandomDmg) {
@@ -45,6 +49,11 @@ function attackingButton(button, text, enemyRandomDmg, characterRandomDmg) {
         console.log(text);
         enemy.changeHP(random(enemyRandomDmg));
         character.changeHP(random(characterRandomDmg));
+        if (button === $btn) {
+            countJolt();
+        } else {
+            countSlap();
+        }
     })
 }
 
@@ -107,6 +116,18 @@ function addLogString(logString) {
     $p.innerText = `${i}. ${logString}`;
     $logs.insertBefore($p, $logs.children[0]);
     i++;
+}
+
+function showAvailableClicks(button, maxClicks = 0) {
+    let buttonText = button.innerText;
+    return function () {
+        console.log(maxClicks);
+        button.innerText = `${buttonText} [${maxClicks}]`;
+        maxClicks--;
+        if (maxClicks < 0) {
+            button.disabled = true;
+        }
+    }
 }
 
 init();
