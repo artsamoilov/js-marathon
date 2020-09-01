@@ -271,9 +271,8 @@ body {
     background: white;
     border: 2px solid #ffc55b;
     border-radius: 10px;
-    min-height: 30px;
     vertical-align: middle;
-    margin: 12px 0;
+    margin: 8px 0;
     padding: 12px 20px;
     outline: none !important;
     cursor: pointer;
