@@ -1,3 +1,8 @@
+import {random} from "./utils.js";
+import {generateLog, addLogString} from "./logs.js";
+
+const buttonsList = document.querySelectorAll('.button');
+
 class Button {
     constructor({name, maxClicks, text, player1Dmg, player2Dmg}) {
         this.buttonId = document.getElementById(`btn-${name}`);
@@ -21,6 +26,24 @@ class Button {
             }
         }
     }
+}
+
+export function attackingButton(button, player1, player2) {
+    button.buttonId.addEventListener('click', function() {
+        console.log(button.text);
+        player1.changeHP(random(button.player1Dmg), function(count) {
+            count && addLogString(generateLog(player1, player2, count));
+        });
+        player2.changeHP(random(button.player2Dmg), function(count) {
+            count && addLogString(generateLog(player2, player1, count));
+        });
+
+        button.availableClicks();
+
+        if (player1.hp.current <= 0 || player2.hp.current <= 0) {
+            buttonsList.forEach(btn => btn.disabled = true);
+        }
+    })
 }
 
 export default Button;

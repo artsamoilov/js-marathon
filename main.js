@@ -1,9 +1,6 @@
 import Pokemon from "./pokemon.js";
 import Button from "./button.js";
-import {random} from "./utils.js";
-import {generateLog, addLogString} from "./logs.js"
-
-const buttonsList = document.querySelectorAll('.button');
+import {attackingButton} from "./button.js";
 
 const player1 = new Pokemon({
     name: 'Pikachu',
@@ -18,14 +15,6 @@ const player2 = new Pokemon({
     type: 'fire',
     selectors: 'enemy',
 });
-
-function init() {
-    console.log('Start game!');
-    attackingButton(button1);
-    attackingButton(button2);
-    attackingButton(button3);
-    attackingButton(button4);
-}
 
 const button1 = new Button({
     name: 'one',
@@ -59,22 +48,12 @@ const button4 = new Button({
     player2Dmg: 80,
 });
 
-function attackingButton(button) {
-    button.buttonId.addEventListener('click', function() {
-        console.log(button.text);
-        player1.changeHP(random(button.player1Dmg), function(count) {
-            count && addLogString(generateLog(player1, player2, count));
-        });
-        player2.changeHP(random(button.player2Dmg), function(count) {
-            count && addLogString(generateLog(player2, player1, count));
-        });
-
-        button.availableClicks();
-
-        if (player1.hp.current <= 0 || player2.hp.current <= 0) {
-            buttonsList.forEach(btn => btn.disabled = true);
-        }
-    })
+function init() {
+    console.log('Start game!');
+    attackingButton(button1, player1, player2);
+    attackingButton(button2, player1, player2);
+    attackingButton(button3, player1, player2);
+    attackingButton(button4, player1, player2);
 }
 
 init();
