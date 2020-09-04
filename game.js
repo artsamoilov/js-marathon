@@ -5,6 +5,7 @@ import {random} from "./utils.js";
 import {generateLog, addLogString} from "./logs.js";
 
 const buttonsArray = [];
+const buttonObjectsArray = [];
 
 let player1;
 let player2;
@@ -81,10 +82,10 @@ class Game {
                 ...buttonsArray[3],
             });
 
-            attack(button0, player1, player2);
-            attack(button1, player1, player2);
-            attack(button2, player1, player2);
-            attack(button3, player1, player2);
+            buttonObjectsArray.push(button0, button1, button2, button3);
+            console.log(buttonObjectsArray);
+
+            newRound(buttonObjectsArray, player1, player2);
         })
     }
 
@@ -93,17 +94,17 @@ class Game {
     }
 }
 
-function attack(button, player1, player2) {
-    button.buttonId.addEventListener('click', function() {
+
+function newRound(buttons, player1, player2) {
+    buttons.forEach(button => button.buttonId.addEventListener('click', function() {
         console.log(button.name);
+
         player1.changeHP(random(player2.attacks[0].maxDamage, player2.attacks[0].minDamage), function(count) {
             count && addLogString(generateLog(player2, player1, count));
         });
         player2.changeHP(random(button.maxDamage, button.minDamage), function(count) {
             count && addLogString(generateLog(player2, player1, count));
         });
-
-        button.availableClicks();
 
         if (player1.hp.current <= 0) {
             console.log('You lose! Start another game?');
@@ -115,6 +116,15 @@ function attack(button, player1, player2) {
                 selectors: 'player2',
             });
         }
+
+        button.availableClicks();
+        refreshListeners();
+    }))
+}
+
+function refreshListeners() {
+    buttonsArray.forEach(button => function() {
+        button.removeEventListener('click', function() {});
     })
 }
 
