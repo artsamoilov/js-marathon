@@ -83,7 +83,6 @@ class Game {
             });
 
             buttonObjectsArray.push(button0, button1, button2, button3);
-            console.log(buttonObjectsArray);
 
             newRound(buttonObjectsArray, player1, player2);
         })
