@@ -1,6 +1,5 @@
 import Pokemon from "./pokemon.js";
 import Button from "./button.js";
-import {pokemons} from "./pokemons.js";
 import {random} from "./utils.js";
 import {generateLog, addLogString} from "./logs.js";
 
@@ -9,33 +8,45 @@ const buttonObjectsArray = [];
 
 let player1;
 let player2;
+let pokemons;
 let newGame;
 
 export function initGame(text) {
-    player1 = new Pokemon ({
-        ...pokemons[random(pokemons.length - 1)],
-        selectors: 'player1',
-    });
-    player2 = new Pokemon ({
-        ...pokemons[random(pokemons.length - 1)],
-        selectors: 'player2',
-    });
     let oldButtons = document.querySelectorAll('.button');
     oldButtons.forEach(button => button.remove());
-    newGame = new Game(text);
+    let newGame = new Game(text);
 }
 
 class Game {
     constructor(text) {
         this.$controlBlock = document.querySelector('.control');
-        this.$pokemonsList = document.querySelectorAll('.pokemon');
         this.text = text;
+
+        this.player1;
+        this.player2;
 
         this.hidePokemons();
         this.startGame(this.text);
     }
 
-    startGame = (text) => {
+    getPokemons = async () => {
+        const response = await fetch('https://reactmarathon-api.netlify.app/api/pokemons');
+        const body = await response.json();
+        return body;
+    }
+
+    startGame = async (text) => {
+        pokemons = await this.getPokemons();
+        // console.log(pokemons);
+        player1 = new Pokemon ({
+            ...pokemons[random(pokemons.length - 1)],
+            selectors: 'player1',
+        })
+        player2 = new Pokemon ({
+            ...pokemons[random(pokemons.length - 1)],
+            selectors: 'player2',
+        })
+
         let $btnStart = document.createElement('button');
         $btnStart.classList.add('button');
         $btnStart.id = 'button-start';
@@ -45,7 +56,7 @@ class Game {
     }
 
     showButtons = (button) => {
-        let $pokeList = this.$pokemonsList;
+        let $pokeList = document.querySelectorAll('.pokemon');
         let $control = this.$controlBlock;
         button.addEventListener('click', function() {
             $pokeList.forEach(pokemon => pokemon.classList.remove('hidden'));
@@ -89,24 +100,27 @@ class Game {
     }
 
     hidePokemons = () => {
-        this.$pokemonsList.forEach(pokemon => pokemon.classList.add('hidden'));
+        let $pokeList = document.querySelectorAll('.pokemon');
+        $pokeList.forEach(pokemon => pokemon.classList.add('hidden'));
     }
 }
 
-
 function newRound(buttons, player1, player2) {
-    buttons.forEach(button => button.buttonId.addEventListener('click', function() {
+    buttons.forEach(button => button.buttonId.addEventListener('click', async function() {
         console.log(button.name);
 
-        player1.changeHP(random(player2.attacks[0].maxDamage, player2.attacks[0].minDamage), function(count) {
-            count && addLogString(generateLog(player2, player1, count));
+        const attackResponse = await fetch(`https://reactmarathon-api.netlify.app/api/fight?player1id=${player1.id}&attackId=${button.id}&player2id=${player2.id}`);
+        const attack = await attackResponse.json();
+        player1.changeHP(attack.kick.player1, function(count) {
+            count && addLogString(generateLog(player1, player2, count));
         });
-        player2.changeHP(random(button.maxDamage, button.minDamage), function(count) {
+        player2.changeHP(attack.kick.player2, function(count) {
             count && addLogString(generateLog(player2, player1, count));
         });
 
         if (player1.hp.current <= 0) {
             console.log('You lose! Start another game?');
+            addLogString('You lose! Start another game?');
             initGame('Start Another Game');
         } else if (player2.hp.current <= 0){
             console.log('You win!');

@@ -1,6 +1,7 @@
 class Button {
     constructor({id, maxCount, name, minDamage, maxDamage}) {
-        this.buttonId = document.getElementById(`button${id}`);
+        this.id = id;
+        this.buttonId = document.getElementById(`button${id - 1}`);
         this.maxCount = maxCount;
         this.name = name;
         this.minDamage = minDamage;

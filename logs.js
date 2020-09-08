@@ -17,7 +17,7 @@ export function generateLog(firstPerson, secondPerson, count) {
         `${firstPerson.name} пытался что-то сказать, но вдруг, неожиданно ${secondPerson.name} со скуки, разбил бровь сопернику. -${count} [${firstPerson.hp.current}/${firstPerson.hp.total}]`
     ];
 
-    return logs[random(logs.length) - 1];
+    return logs[random(logs.length)];
 }
 
 export function addLogString(logString) {
